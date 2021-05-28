@@ -13,3 +13,13 @@ pjmedia/include/pjmedia/config_auto.h
 pjsip/build/os-auto.mak
 pjsip/include/pjsip/sip_autoconf.h
 third_party/build/os-auto.mak
+pjlib-util/build/output/
+pjlib-util/lib/
+pjlib/build/output/
+pjlib/lib/
+pjmedia/build/output/
+pjmedia/lib/
+pjnath/build/output/
+pjnath/lib/
+pjsip/build/output/
+pjsip/lib/
