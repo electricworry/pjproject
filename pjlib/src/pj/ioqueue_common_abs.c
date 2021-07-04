@@ -513,6 +513,10 @@ pj_bool_t ioqueue_dispatch_read_event( pj_ioqueue_t *ioqueue,
 
 	if (read_op->op == PJ_IOQUEUE_OP_RECV_FROM) {
 	    read_op->op = PJ_IOQUEUE_OP_NONE;
+        // Fuzzing note: Socket is read here.
+#ifdef __AFL_COMPILER
+        printf("SOCKET READ\n");
+#endif
 	    rc = pj_sock_recvfrom(h->fd, read_op->buf, &bytes_read, 
 				  read_op->flags,
 				  read_op->rmt_addr, 

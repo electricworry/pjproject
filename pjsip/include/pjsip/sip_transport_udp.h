@@ -364,6 +364,7 @@ PJ_DECL(pj_status_t) pjsip_udp_transport_restart2(pjsip_transport *transport,
 					        const pj_sockaddr *local,
 					        const pjsip_host_port *a_name);
 
+PJ_DECL(void) fuzzing_send_spoofed_message(pjsip_endpoint *endpt, unsigned char *msg, int len);
 
 PJ_END_DECL
 

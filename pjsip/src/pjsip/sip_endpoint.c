@@ -715,7 +715,7 @@ PJ_DEF(pj_status_t) pjsip_endpt_handle_events2(pjsip_endpoint *endpt,
     timeout.sec = timeout.msec = 0;
     c = pj_timer_heap_poll( endpt->timer_heap, &timeout );
     if (c > 0)
-	count += c;
+	    count += c;
 
     /* timer_heap_poll should never ever returns negative value, or otherwise
      * ioqueue_poll() will block forever!
@@ -1077,6 +1077,10 @@ static void endpt_on_rx_msg( pjsip_endpoint *endpt,
     pjsip_process_rdata_param_default(&proc_prm);
     proc_prm.silent = PJ_TRUE;
 
+    // Fuzzing note: processing received data
+#ifdef __AFL_COMPILER
+    printf("PASSING DATA ON FOR PROCESSING\n");
+#endif
     pjsip_endpt_process_rx_data(endpt, rdata, &proc_prm, &handled);
 
     /* No module is able to handle the message */

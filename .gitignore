@@ -23,3 +23,4 @@ pjnath/build/output/
 pjnath/lib/
 pjsip/build/output/
 pjsip/lib/
+__pycache__

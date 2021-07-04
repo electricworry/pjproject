@@ -1273,3 +1273,29 @@ PJ_DEF(pj_status_t) pjsip_udp_transport_restart2(pjsip_transport *transport,
 
     return PJ_SUCCESS;
 }
+
+PJ_DECL(void) fuzzing_send_spoofed_message(pjsip_endpoint *endpt, unsigned char *msg, int len)
+{
+	printf("RECEIVED SPOOFED MESSAGE:\n");
+	printf("%.*s\n", len, msg);
+	pjsip_tpmgr *tpmgr = pjsip_endpt_get_tpmgr(endpt);
+	// pj_pool_t *pool = tpmgr->pool;
+	pjsip_transport *tp;
+	pj_sockaddr address;
+	int address_len = sizeof(pj_sockaddr_in);
+	pj_bzero(&address, sizeof(address));
+	address.addr.sa_family = pj_AF_INET();
+	address.ipv4.sin_port = 5060;
+	address.ipv6.sin6_port = 5060;
+	pjsip_tpmgr_acquire_transport(tpmgr, PJSIP_TRANSPORT_UDP, &address, address_len, NULL, &tp);
+	struct udp_transport *tp_udp = (struct udp_transport*) tp;
+	pjsip_rx_data *rdata = *tp_udp->rdata;
+	printf("%p\n", rdata);
+	// udp_on_read_complete()
+	// ioqueue_dispatch_read_event()
+	pj_memcpy(rdata->pkt_info.packet, msg, len);
+	rdata->pkt_info.packet[len] = 0;
+	rdata->pkt_info.len = len;
+	rdata->pkt_info.zero = 0;
+	pjsip_tpmgr_receive_packet(tpmgr, rdata);
+}
